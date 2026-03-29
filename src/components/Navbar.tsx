@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import BookingDialog from "./BookingDialog";
 
 const navLinks = [
   { label: "Home", href: "#hero" },
