@@ -1,4 +1,5 @@
 import heroImg from "@/assets/hero-hotel.jpg";
+import BookingDialog from "./BookingDialog";
 
 const HeroSection = () => {
   const scrollToContact = () => {
