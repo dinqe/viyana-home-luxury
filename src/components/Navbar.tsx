@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import BookingDialog from "./BookingDialog";
-
-const navLinks = [
-  { label: "Home", href: "#hero" },
-  { label: "Amenities", href: "#amenities" },
-  { label: "Suites", href: "#suites" },
-  { label: "Reviews", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Navbar = () => {
+  const { lang, setLang, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navLinks = [
+    { label: t("nav.home"), href: "#hero" },
+    { label: t("nav.amenities"), href: "#amenities" },
+    { label: t("nav.suites"), href: "#suites" },
+    { label: t("nav.reviews"), href: "#testimonials" },
+    { label: t("nav.contact"), href: "#contact" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -24,6 +26,8 @@ const Navbar = () => {
     setMobileOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const toggleLang = () => setLang(lang === "en" ? "tr" : "en");
 
   return (
     <nav
@@ -37,12 +41,12 @@ const Navbar = () => {
             Viyana Suit
           </span>
           <span className={`text-[10px] tracking-[0.25em] uppercase font-sans font-light ${scrolled ? "text-muted-foreground" : "text-primary-foreground/70"}`}>
-            Like Your Own Home
+            {t("nav.motto")}
           </span>
         </a>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <button
               key={link.href}
@@ -54,20 +58,47 @@ const Navbar = () => {
               {link.label}
             </button>
           ))}
+
+          {/* Language Toggle */}
+          <button
+            onClick={toggleLang}
+            className={`flex items-center gap-1.5 text-sm font-sans font-semibold tracking-wide px-3 py-1.5 rounded-full border transition-all duration-300 hover:scale-105 ${
+              scrolled
+                ? "border-gold/40 text-foreground hover:border-gold hover:text-gold"
+                : "border-primary-foreground/30 text-primary-foreground/90 hover:border-gold hover:text-gold"
+            }`}
+          >
+            <Globe size={14} />
+            {lang === "en" ? "TR" : "EN"}
+          </button>
+
           <BookingDialog>
             <button className="bg-gold text-foreground font-sans text-sm font-semibold px-5 py-2.5 rounded-lg gold-glow gold-glow-hover transition-all duration-300 hover:scale-105">
-              Book Your Stay
+              {t("nav.book")}
             </button>
           </BookingDialog>
         </div>
 
         {/* Mobile toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className={`md:hidden p-2 ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={toggleLang}
+            className={`flex items-center gap-1 text-xs font-sans font-semibold px-2.5 py-1.5 rounded-full border transition-colors ${
+              scrolled
+                ? "border-gold/40 text-foreground"
+                : "border-primary-foreground/30 text-primary-foreground/90"
+            }`}
+          >
+            <Globe size={12} />
+            {lang === "en" ? "TR" : "EN"}
+          </button>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className={`p-2 ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+          >
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -85,7 +116,7 @@ const Navbar = () => {
             ))}
             <BookingDialog>
               <button className="bg-gold text-foreground font-sans text-sm font-semibold px-5 py-2.5 rounded-lg gold-glow text-center w-full">
-                Book Your Stay
+                {t("nav.book")}
               </button>
             </BookingDialog>
           </div>
