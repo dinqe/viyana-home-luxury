@@ -1,0 +1,85 @@
+import roomDeluxe from "@/assets/room-deluxe.jpg";
+import roomHoneymoon from "@/assets/room-honeymoon.jpg";
+import roomJacuzzi from "@/assets/room-jacuzzi.jpg";
+import roomPool from "@/assets/room-pool.jpg";
+
+const suites = [
+  {
+    image: roomDeluxe,
+    title: "Deluxe Standard Suites",
+    description: "Comfortable, modern, and perfectly pristine.",
+  },
+  {
+    image: roomHoneymoon,
+    title: "Honeymoon Suites",
+    description: "Meticulously decorated for your most special days.",
+  },
+  {
+    image: roomJacuzzi,
+    title: "Jacuzzi Suites",
+    description: "Unwind in luxury with your private in-room jacuzzi.",
+  },
+  {
+    image: roomPool,
+    title: "Private Pool Apartments",
+    description: "Exclusive heated pools with unlimited VIP treats.",
+  },
+];
+
+const SuitesSection = () => {
+  const scrollToContact = () => {
+    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section id="suites" className="section-padding">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-16 animate-on-scroll">
+          <p className="font-sans text-sm tracking-[0.2em] uppercase text-gold mb-3">
+            Accommodation
+          </p>
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            Our Suites
+          </h2>
+          <div className="w-16 h-0.5 bg-gold mx-auto" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+          {suites.map((suite, idx) => (
+            <div
+              key={suite.title}
+              className="animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer"
+              style={{ transitionDelay: `${idx * 100}ms` }}
+              onClick={scrollToContact}
+            >
+              <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                <img
+                  src={suite.image}
+                  alt={suite.title}
+                  loading="lazy"
+                  width={800}
+                  height={600}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-2xl" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                <h3 className="font-serif text-xl md:text-2xl font-bold mb-1" style={{ color: "hsl(40, 30%, 95%)" }}>
+                  {suite.title}
+                </h3>
+                <p className="font-sans text-sm" style={{ color: "hsl(40, 20%, 75%)" }}>
+                  {suite.description}
+                </p>
+                <span className="inline-block mt-3 text-gold font-sans text-sm font-semibold tracking-wide group-hover:translate-x-2 transition-transform duration-300">
+                  View Details →
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default SuitesSection;
