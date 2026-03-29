@@ -54,12 +54,11 @@ const Navbar = () => {
               {link.label}
             </button>
           ))}
-          <button
-            onClick={() => handleClick("#contact")}
-            className="bg-gold text-foreground font-sans text-sm font-semibold px-5 py-2.5 rounded-lg gold-glow gold-glow-hover transition-all duration-300 hover:scale-105"
-          >
-            Book Your Stay
-          </button>
+          <BookingDialog>
+            <button className="bg-gold text-foreground font-sans text-sm font-semibold px-5 py-2.5 rounded-lg gold-glow gold-glow-hover transition-all duration-300 hover:scale-105">
+              Book Your Stay
+            </button>
+          </BookingDialog>
         </div>
 
         {/* Mobile toggle */}
