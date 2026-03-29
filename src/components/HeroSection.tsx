@@ -1,4 +1,5 @@
 import heroImg from "@/assets/hero-hotel.jpg";
+import BookingDialog from "./BookingDialog";
 
 const HeroSection = () => {
   const scrollToContact = () => {
@@ -38,13 +39,14 @@ const HeroSection = () => {
           Welcome to Viyana Suit, Gaziosmanpaşa's premier destination for unmatched
           hygiene, comfort, and sincere Turkish hospitality.
         </p>
-        <button
-          onClick={scrollToContact}
-          className="bg-gold text-foreground font-sans font-semibold text-base md:text-lg px-8 py-4 rounded-xl gold-glow gold-glow-hover transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.8s" }}
-        >
-          Check Availability
-        </button>
+        <BookingDialog>
+          <button
+            className="bg-gold text-foreground font-sans font-semibold text-base md:text-lg px-8 py-4 rounded-xl gold-glow gold-glow-hover transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
+            style={{ animationDelay: "0.8s" }}
+          >
+            Check Availability
+          </button>
+        </BookingDialog>
       </div>
 
       {/* Scroll indicator */}
