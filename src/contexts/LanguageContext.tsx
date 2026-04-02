@@ -2,10 +2,18 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 type Lang = "en" | "tr";
 
+export interface HotelReview {
+  id: number;
+  author: string;
+  rating: number;
+  text: string;
+}
+
 interface LanguageContextType {
   lang: Lang;
   setLang: (lang: Lang) => void;
   t: (key: string) => string;
+  getHotelReviews: () => HotelReview[];
 }
 
 const translations: Record<string, Record<Lang, string>> = {
@@ -135,6 +143,43 @@ const translations: Record<string, Record<Lang, string>> = {
   "booking.successDesc": { en: "Our team will contact you shortly to confirm your booking.", tr: "Ekibimiz rezervasyonunuzu onaylamak için kısa süre içinde sizinle iletişime geçecektir." },
 };
 
+const hotelReviewsByLang: Record<Lang, HotelReview[]> = {
+  en: [
+    { id: 1, author: "Çağla Özgüroğlu", rating: 5, text: "I can say this is the cleanest and most attentive hotel in Istanbul. They are very warm and caring... and thoughtful too. The complimentary items are fantastic. Fruit platter, snack platter, cocktails... you won't regret staying here." },
+    { id: 2, author: "Mine Özön", rating: 5, text: "The cleanliness and attention to detail were absolutely excellent, and the service was superb. You feel like you're in your own home, not a hotel. Thank you so much for everything." },
+    { id: 3, author: "Okancan Uzel", rating: 5, text: "The hotel is very nice, we are especially pleased with the staff, particularly Mr. Irfan. We stayed as a family and were truly satisfied; they make you feel at home." },
+    { id: 4, author: "Yusuf Can", rating: 5, text: "We stayed in an apartment with a pool and everything was perfect, the refreshments and service were excellent. Thank you for everything." },
+    { id: 5, author: "Teris Haciyeva", rating: 5, text: "We came from Azerbaijan as a family and had a wonderful stay, it was truly superb. Many thanks to the staff at reception, they even helped with carrying my baby. My first choice for accommodation in Turkey." },
+    { id: 6, author: "Merve Elif Kalaycıoğlu", rating: 5, text: "It is the cleanest hotel I have ever stayed in. It is the only address for comfort and quality. I would also like to thank Ms. Hatice at the reception for her sincerity and attention." },
+    { id: 7, author: "Naz", rating: 5, text: "My wife and I chose a honeymoon suite, and it was meticulously decorated and incredibly clean. The staff were very helpful and attentive; thank you again for everything :)" },
+    { id: 8, author: "Halil Özer", rating: 5, text: "I only planned to stay for one night, but they treated me so well that I extended my stay. I've never seen such unlimited complimentary treats at any other hotel I've stayed at." },
+    { id: 9, author: "Sebo Sari", rating: 5, text: "I would like to thank the Vienna Suite family for their warmth and attention. A special thank you to Hatice Hanım, Adem Bey, and Enes Bey. It's a place where you can find a family atmosphere." },
+    { id: 10, author: "Cömert Kızıyil", rating: 5, text: "Staying at the Vienna Suite Hotel was truly wonderful. It far exceeded my expectations in terms of both comfort and style. The rooms were extremely clean and modern." },
+    { id: 11, author: "M. M.", rating: 5, text: "I've stayed here for almost a month, location is good, there are all types of shops around, great service, friendly and helpful staff. Highly Recommended, 10/10." },
+    { id: 12, author: "Mustafa Othman", rating: 5, text: "Great stay! One of our favorite places to stay in. Clean, warm comfy rooms and beds. Fabulous friendly service." },
+    { id: 13, author: "Z. B", rating: 5, text: "The accommodation was extremely clean and centrally located. The staff were incredibly friendly and helpful. My room on the 5th floor offered a wonderful view. I was completely satisfied!" },
+    { id: 14, author: "Onur Yeşilırmak", rating: 5, text: "One of the best places to stay with a family. The attention and care is amazing. I definitely appreciate the staff. I recommend it to everyone." },
+    { id: 15, author: "Mahmut Uygur", rating: 5, text: "We stayed with my friends. The rooms were very clean and tidy. Tea, fruit platters, and snack platters are brought to the rooms as complimentary items upon request." },
+  ],
+  tr: [
+    { id: 1, author: "Çağla Özgüroğlu", rating: 5, text: "İstanbul'da gördüğüm en temiz ve en ilgili otellerden biri diyebilirim. Çok sıcak, ilgili ve düşünceliler. Ücretsiz ikramlar harika. Meyve tabağı, atıştırmalık tabağı, kokteyller... burada kaldığınıza asla pişman olmazsınız." },
+    { id: 2, author: "Mine Özön", rating: 5, text: "Temizlik ve detaylara verilen önem kesinlikle mükemmeldi, hizmet de harikaydı. Kendinizi bir otelde değil kendi evinizde gibi hissediyorsunuz. Her şey için çok teşekkür ederim." },
+    { id: 3, author: "Okancan Uzel", rating: 5, text: "Otel çok güzel, özellikle personelden çok memnun kaldık; özellikle İrfan Bey'den. Ailece konakladık ve gerçekten memnun ayrıldık, sizi evinizde hissettiriyorlar." },
+    { id: 4, author: "Yusuf Can", rating: 5, text: "Havuzlu bir dairede konakladık ve her şey mükemmeldi, ikramlar ve hizmet çok iyiydi. Her şey için teşekkür ederiz." },
+    { id: 5, author: "Teris Haciyeva", rating: 5, text: "Azerbaycan'dan ailece geldik ve harika bir konaklama geçirdik, gerçekten mükemmeldi. Resepsiyon ekibine çok teşekkür ederim, bebeğimi taşımama bile yardımcı oldular. Türkiye'de konaklama için ilk tercihim." },
+    { id: 6, author: "Merve Elif Kalaycıoğlu", rating: 5, text: "Kaldığım en temiz otel. Konfor ve kalite için tek adres. Ayrıca resepsiyondaki Hatice Hanım'a samimiyeti ve ilgisi için teşekkür ederim." },
+    { id: 7, author: "Naz", rating: 5, text: "Eşimle birlikte balayı süitini seçtik, oda özenle dekore edilmiş ve inanılmaz temizdi. Personel çok yardımsever ve ilgiliydi; her şey için tekrar teşekkürler :)" },
+    { id: 8, author: "Halil Özer", rating: 5, text: "Sadece bir gece kalmayı planlamıştım ama o kadar iyi ağırlandım ki konaklamamı uzattım. Kaldığım başka hiçbir otelde bu kadar sınırsız ikram görmedim." },
+    { id: 9, author: "Sebo Sari", rating: 5, text: "Sıcaklıkları ve ilgileri için Viyana Suit ailesine teşekkür ederim. Hatice Hanım, Adem Bey ve Enes Bey'e ayrıca teşekkürler. Aile ortamını bulabileceğiniz bir yer." },
+    { id: 10, author: "Cömert Kızıyil", rating: 5, text: "Viyana Suit Hotel'de konaklamak gerçekten harikaydı. Hem konfor hem stil açısından beklentilerimin çok üstündeydi. Odalar son derece temiz ve moderndi." },
+    { id: 11, author: "M. M.", rating: 5, text: "Burada neredeyse bir ay kaldım, konumu çok iyi, etrafında her tür mağaza var. Hizmet harika, personel güler yüzlü ve yardımsever. Kesinlikle tavsiye ederim, 10/10." },
+    { id: 12, author: "Mustafa Othman", rating: 5, text: "Harika bir konaklama! En sevdiğimiz konaklama yerlerinden biri. Temiz, sıcak ve konforlu odalar ile yataklar. Muhteşem ve samimi bir hizmet." },
+    { id: 13, author: "Z. B", rating: 5, text: "Konaklama son derece temizdi ve merkezi bir konumdaydı. Personel inanılmaz derecede güler yüzlü ve yardımseverdi. 5. kattaki odam harika bir manzaraya sahipti. Tamamen memnun kaldım!" },
+    { id: 14, author: "Onur Yeşilırmak", rating: 5, text: "Ailece kalmak için en iyi yerlerden biri. İlgi ve alaka inanılmaz. Personeli gerçekten takdir ediyorum. Herkese tavsiye ederim." },
+    { id: 15, author: "Mahmut Uygur", rating: 5, text: "Arkadaşlarımla birlikte konakladık. Odalar çok temiz ve düzenliydi. Çay, meyve tabağı ve atıştırmalık tabakları talep üzerine odaya ücretsiz olarak getiriliyor." },
+  ],
+};
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
@@ -144,8 +189,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return translations[key]?.[lang] || key;
   };
 
+  const getHotelReviews = (): HotelReview[] => hotelReviewsByLang[lang];
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t, getHotelReviews }}>
       {children}
     </LanguageContext.Provider>
   );
