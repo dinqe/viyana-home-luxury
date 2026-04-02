@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 type Lang = "en" | "tr";
 
@@ -185,14 +185,55 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLang] = useState<Lang>("en");
 
+  useEffect(() => {
+    const storedLang = window.localStorage.getItem("lang");
+    if (storedLang === "en" || storedLang === "tr") {
+      setLang(storedLang);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 3000);
+
+    const detectLanguageFromIp = async () => {
+      try {
+        const response = await fetch("https://ipapi.co/json/", {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error("ip lookup failed");
+
+        const data = (await response.json()) as { country_code?: string };
+        const detected: Lang = data.country_code === "TR" ? "tr" : "en";
+        setLang(detected);
+      } catch {
+        // Fallback keeps English default if geolocation is unavailable.
+        setLang("en");
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    };
+
+    detectLanguageFromIp();
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeout);
+    };
+  }, []);
+
   const t = (key: string): string => {
     return translations[key]?.[lang] || key;
   };
 
   const getHotelReviews = (): HotelReview[] => hotelReviewsByLang[lang];
 
+  const updateLang = (nextLang: Lang) => {
+    setLang(nextLang);
+    window.localStorage.setItem("lang", nextLang);
+  };
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t, getHotelReviews }}>
+    <LanguageContext.Provider value={{ lang, setLang: updateLang, t, getHotelReviews }}>
       {children}
     </LanguageContext.Provider>
   );
