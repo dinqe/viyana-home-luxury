@@ -27,7 +27,7 @@ const SuitesSection = () => {
           {suites.map((suite, idx) => (
             <div
               key={idx}
-              className="animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer"
+              className="animate-on-scroll group relative overflow-hidden rounded-2xl"
               style={{ transitionDelay: `${idx * 100}ms` }}
             >
               <div className="aspect-[4/3] overflow-hidden rounded-2xl">
@@ -37,9 +37,6 @@ const SuitesSection = () => {
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                 <h3 className="font-serif text-xl md:text-2xl font-bold mb-1" style={{ color: "hsl(40, 30%, 95%)" }}>{suite.title}</h3>
                 <p className="font-sans text-sm" style={{ color: "hsl(40, 20%, 75%)" }}>{suite.description}</p>
-                <span className="inline-block mt-3 text-gold font-sans text-sm font-semibold tracking-wide group-hover:translate-x-2 transition-transform duration-300">
-                  {t("suites.viewDetails")}
-                </span>
               </div>
             </div>
           ))}

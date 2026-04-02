@@ -38,6 +38,37 @@ const BookingDialog = ({ children }: BookingDialogProps) => {
       toast({ title: t("booking.error"), variant: "destructive" });
       return;
     }
+
+    const WHATSAPP_PHONE = "905320615996"; // WhatsApp expects digits only (no "+")
+    const suiteLabelByValue: Record<string, string> = {
+      deluxe: t("booking.deluxe"),
+      honeymoon: t("booking.honeymoon"),
+      jacuzzi: t("booking.jacuzzi"),
+      pool: t("booking.pool"),
+    };
+
+    const suiteType = suiteLabelByValue[formData.roomType] ?? formData.roomType;
+    const childrenValue = formData.children ? formData.children : "0";
+    const specialRequests = formData.specialRequests?.trim() || "None";
+
+    const message = [
+      "Viyana Suit - Booking Request",
+      `Name: ${formData.firstName} ${formData.lastName}`,
+      `Email: ${formData.email || "N/A"}`,
+      `Phone: ${formData.phone}`,
+      `Suite Type: ${suiteType}`,
+      `Check-in: ${format(checkIn, "PP")}`,
+      `Check-out: ${format(checkOut, "PP")}`,
+      `Adults: ${formData.adults}`,
+      `Children: ${childrenValue}`,
+      `Special Requests: ${specialRequests}`,
+    ].join("\n");
+
+    const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+
+    // Open WhatsApp with the pre-filled booking message.
+    window.open(waUrl, "_blank", "noopener,noreferrer");
+
     toast({ title: t("booking.success"), description: t("booking.successDesc") });
     setOpen(false);
     setFormData({ firstName: "", lastName: "", email: "", phone: "", roomType: "", adults: "", children: "", specialRequests: "" });

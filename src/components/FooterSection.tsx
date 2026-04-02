@@ -59,9 +59,15 @@ const FooterSection = () => {
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <MapPin size={16} className="text-gold mt-0.5 shrink-0" />
-                  <span className="font-sans text-sm" style={{ color: "hsl(40, 20%, 70%)" }}>
-                    Gaziosmanpaşa, Istanbul, Türkiye
-                  </span>
+                  <a
+                    href="https://maps.app.goo.gl/SBEdD1wykRVxne117"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-sans text-sm hover:text-gold transition-colors"
+                    style={{ color: "hsl(40, 20%, 70%)" }}
+                  >
+                    Bağlarbaşı, Küçükköy Yolu Cd. No : 34, 34250 Gaziosmanpaşa/İstanbul
+                  </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone size={16} className="text-gold shrink-0" />
@@ -71,13 +77,29 @@ const FooterSection = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail size={16} className="text-gold shrink-0" />
-                  <span className="font-sans text-sm" style={{ color: "hsl(40, 20%, 70%)" }}>
+                  <a href="mailto:info@viyanasuit.com" className="font-sans text-sm hover:text-gold transition-colors" style={{ color: "hsl(40, 20%, 70%)" }}>
                     info@viyanasuit.com
-                  </span>
+                  </a>
                 </div>
                 <div className="flex items-center gap-4 mt-4">
-                  <a href="#" className="text-gold/60 hover:text-gold transition-colors"><Instagram size={20} /></a>
-                  <a href="#" className="text-gold/60 hover:text-gold transition-colors"><Facebook size={20} /></a>
+                  <a
+                    href="https://www.instagram.com/viyanasuit/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gold/60 hover:text-gold transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <Instagram size={20} />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/p/Viyana-Suit-61568387053792/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gold/60 hover:text-gold transition-colors"
+                    aria-label="Facebook"
+                  >
+                    <Facebook size={20} />
+                  </a>
                 </div>
               </div>
             </div>
